@@ -6,7 +6,7 @@ ENV PATH $PATH:/usr/local/bin
 RUN apt-get update && \
     apt install -y git curl
 
-curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b "/usr/local/bin/" "${REVIEWDOG_VERSION}" 2>&1
+RUN curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b "/usr/local/bin/" "${REVIEWDOG_VERSION}" 2>&1
 
 COPY requirements.txt /requirements.txt
 COPY parse.py /parse.py
