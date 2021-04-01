@@ -2,14 +2,7 @@
 
 [[ ! -z "$INPUT_SKIP_CHECK" ]] && SKIP_CHECK_FLAG="--skip-check $INPUT_SKIP_CHECK"
 
-export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
-
-# TEMP_PATH="$(mktemp -d)"
-# PATH="${TEMP_PATH}:$PATH"
-
-# echo '::group::🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog'
-# curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b "${TEMP_PATH}" "${REVIEWDOG_VERSION}" 2>&1
-# echo '::endgroup::'
+# export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 checkov -d $INPUT_WORKING_DIRECTORY $SKIP_CHECK_FLAG -o json \
     | python3 /parse.py \
