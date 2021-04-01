@@ -25,10 +25,10 @@ jobs:
           checkov_return="${{ steps.test.outputs.checkov-return-code }}"
           reviewdog_return="${{ steps.test.outputs.reviewdog-return-code }}"
 
-          if [ "$checkov_return" -eq 3 ]; then
+          if [ "$checkov_return" -eq 1 ]; then
             echo "checkov correctly returned failure ${checkov_return}"
           else
-            echo "checkov returned ${checkov_return}, expected '3'. Failing..."
+            echo "checkov returned ${checkov_return}, expected '1'. Failing..."
             exit 1
           fi
 
@@ -44,7 +44,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        # continue-on-error: true
+        continue-on-error: true
         id: test
         with:
           github_token: ${{ secrets.github_token }}
@@ -52,13 +52,33 @@ jobs:
           fail_on_error: "true"
           filter_mode: "nofilter"
           working_directory: testdata
+      # The check is expected to fail on the test data
+      - name: Check return codes
+        if: success() || failure ()
+        run: |
+          checkov_return="${{ steps.test.outputs.checkov-return-code }}"
+          reviewdog_return="${{ steps.test.outputs.reviewdog-return-code }}"
+
+          if [ "$checkov_return" -eq 1 ]; then
+            echo "checkov correctly returned failure ${checkov_return}"
+          else
+            echo "checkov returned ${checkov_return}, expected '1'. Failing..."
+            exit 1
+          fi
+
+          if [ "$reviewdog_return" -eq 0 ]; then
+            echo "reviewdog correctly returned success: ${reviewdog_return}"
+          else
+            echo "reviewdog returned ${reviewdog_return}, expected '0'. Failing..."
+            exit 1
+          fi
   test-pr-review:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: ./
-        # continue-on-error: true
+        continue-on-error: true
         id: test
         with:
           github_token: ${{ secrets.github_token }}
@@ -66,3 +86,23 @@ jobs:
           fail_on_error: "true"
           filter_mode: "nofilter"
           working_directory: testdata
+      # The check is expected to fail on the test data
+      - name: Check return codes
+        if: success() || failure ()
+        run: |
+          checkov_return="${{ steps.test.outputs.checkov-return-code }}"
+          reviewdog_return="${{ steps.test.outputs.reviewdog-return-code }}"
+
+          if [ "$checkov_return" -eq 1 ]; then
+            echo "checkov correctly returned failure ${checkov_return}"
+          else
+            echo "checkov returned ${checkov_return}, expected '1'. Failing..."
+            exit 1
+          fi
+
+          if [ "$reviewdog_return" -eq 0 ]; then
+            echo "reviewdog correctly returned success: ${reviewdog_return}"
+          else
+            echo "reviewdog returned ${reviewdog_return}, expected '0'. Failing..."
+            exit 1
+          fi
