@@ -52,3 +52,17 @@ jobs:
           fail_on_error: "true"
           filter_mode: "nofilter"
           working_directory: testdata
+  test-pr-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        # continue-on-error: true
+        id: test
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          fail_on_error: "true"
+          filter_mode: "nofilter"
+          working_directory: testdata
