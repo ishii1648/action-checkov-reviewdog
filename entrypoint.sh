@@ -2,7 +2,7 @@
 
 [[ ! -z "$INPUT_SKIP_CHECK" ]] && SKIP_CHECK_FLAG="--skip-check $INPUT_SKIP_CHECK"
 
-# export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
+export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 checkov -d $INPUT_WORKING_DIRECTORY $SKIP_CHECK_FLAG -o json \
     | python3 /parse.py \
