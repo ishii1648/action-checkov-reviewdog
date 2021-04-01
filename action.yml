@@ -1,0 +1,44 @@
+name: 'Checkov with Reviewdog GitHub Action'
+author: 'Ishii1648'
+description: 'Run Checkov with Reviewdog against Terraform/CloudFormation infrastructure code, as a pre-packaged GitHub Action.'
+inputs:
+  github_token:
+    description: 'GITHUB_TOKEN'
+    required: true
+  reporter:
+    description: |
+      Reporter of reviewdog command [github-pr-check,github-pr-review].
+      Default is github-pr-check.
+    default: 'github-pr-check'
+  filter_mode:
+    description: |
+      Filtering for the reviewdog command [added,diff_context,file,nofilter].
+      Default is added.
+    default: 'added'
+  fail_on_error:
+    description: |
+      Exit code for reviewdog when errors are found [true,false]
+      Default is `false`.
+    default: 'false'
+  working_directory:
+    description: |
+      Directory to run the action on, from the repo root.
+      Default is . ( root of the repository)
+    default: '.'
+  skip_check:
+    description: 'Run scan on all checks but a specific check identifier (comma separated)'
+    required: false
+
+branding:
+  icon: 'shield'
+  color: 'purple'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+    INPUT_REPORTER: ${{ inputs.reporter }}
+    INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
+    INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+    INPUT_WORKING_DIRECTORY: ${{ inputs.working_directory }}
+    INPUT_SKIP_CHECK: ${{ inputs.skip_check }}
