@@ -1,10 +1,10 @@
-FROM python:slim
+FROM python:3.12-slim
 
-ARG REVIEWDOG_VERSION="v0.11.0"
+ARG REVIEWDOG_VERSION="v0.16.0"
 ENV PATH $PATH:/usr/local/bin
 
 RUN apt-get update && \
-    apt install -y git curl
+    apt-get install -y git curl
 
 RUN curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b "/usr/local/bin/" "${REVIEWDOG_VERSION}" 2>&1
 
